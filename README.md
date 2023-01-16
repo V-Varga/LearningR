@@ -1,3 +1,8 @@
+Name: Vi Varga
+
+Research Field: Comparative genomics of antibacterial resistance gene evolution
+
+
 TODO: Add more to the title of your project here
 
 # LearningR:
