@@ -1,5 +1,7 @@
 Name: Vi Varga
 
+PhD Student, Chalmers University
+
 Research Field: Comparative genomics of antibacterial resistance gene evolution
 
 
