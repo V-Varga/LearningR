@@ -19,8 +19,10 @@ summary(airquality)
 2 + 2 # Ctrl+Shift+A
 
 
-# Packages ----------------------------------------------------------------
+# Loading packages & data --------------------------------------------------------
 
 library(tidyverse)
+library(NHANES)
 
-# This will be used for testing out Git
+# Briefly glimpse contents of dataset
+glimpse(NHANES)
