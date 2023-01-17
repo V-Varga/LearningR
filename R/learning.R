@@ -298,7 +298,8 @@ nhanes_small %>%
     mean_age = mean(age, na.rm = TRUE),
     max_age = max(age, na.rm = TRUE),
     min_age = min(age, na.rm = TRUE)
-  )
+  ) %>%
+    ungroup()
 
 # 2. What is the mean, max, and min differences in systolic BP and diastolic BP between active and inactive persons with or without diabetes?
 nhanes_small %>%
@@ -311,7 +312,8 @@ nhanes_small %>%
     mean_bp_dia = mean(bp_dia_ave, na.rm = TRUE),
     max_bp_dia = max(bp_dia_ave, na.rm = TRUE),
     min_bp_dia = min(bp_dia_ave, na.rm = TRUE),
-  )
+  ) %>%
+    ungroup()
 
 
 # Saving datasets as files ------------------------------------------------
@@ -345,4 +347,5 @@ NHANES %>%
   summarise(
     mean_bmi = mean(bmi, na.rm = TRUE),
     median_bmi = median(bmi, na.rm = TRUE)
-  )
+  ) %>%
+    ungroup()
