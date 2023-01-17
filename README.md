@@ -1,8 +1,10 @@
 Name: Vi Varga
 
-PhD Student, Chalmers University
+Position: PhD Student, Chalmers University
 
-Research Field: Comparative genomics of antibacterial resistance gene evolution
+Research Field: Comparative genomics of antibiotic resistance gene evolution
+
+Date: 17.01.2023
 
 
 TODO: Add more to the title of your project here
