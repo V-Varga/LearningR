@@ -105,3 +105,42 @@ rename(blood_pressure, bp_systolic = bp_sys_ave)
 nhanes_small %>%
   select(starts_with("bp_")) %>%
   rename(bp_systolic = bp_sys_ave)
+
+
+# Filtering data ----------------------------------------------------------
+
+# Participants who are not physically active
+nhanes_small %>%
+    filter(phys_active == "No")
+# Participants who are physically active
+nhanes_small %>%
+    filter(phys_active != "No")
+# Participants who have BMI equal to 25
+nhanes_small %>%
+    filter(bmi == 25)
+# Participants who have BMI equal to or more than 25
+nhanes_small %>%
+    filter(bmi >= 25)
+
+# logical operators
+TRUE & TRUE
+TRUE & FALSE
+FALSE & FALSE
+TRUE | TRUE
+TRUE | FALSE
+FALSE | FALSE
+
+# When BMI is 25 AND phys_active is No
+nhanes_small %>%
+    filter(bmi == 25 & phys_active == "No")
+# When BMI is 25 OR phys_active is No
+nhanes_small %>%
+    filter(bmi == 25 | phys_active == "No")
+
+# Arranging data by age in ascending order
+nhanes_small %>%
+    arrange(age)
+# when used on character data, alphabetical
+nhanes_small %>%
+    arrange(education)
+
