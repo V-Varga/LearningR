@@ -1,3 +1,4 @@
+# Here's an example of a conflict.
 # R basics ----------------------------------------------------------------
 
 # printing to the console
