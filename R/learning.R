@@ -321,3 +321,28 @@ readr::write_csv(
   nhanes_small,
   here::here("data/nhanes_small.csv")
 )
+# We use the here() function to tell R to go to the project root (where the .Rproj file is found) and then use that file path
+
+
+# Practicing dplyr functions ----------------------------------------------
+
+# Practice using dplyr by using the NHANES dataset and wrangling the data into a summary output. Don’t create any intermediate objects by only using the pipe operator to link each task below with the next one.
+
+NHANES %>%
+  # 1. Rename all columns to use snakecase.
+  rename_with(nhanes_small, snakecase::to_snake_case) %>%
+  # 2. Select the columns gender, age and BMI.
+  select(gender, age, bmi) %>%
+  # 3. Exclude "NAs" from all of the selected columns.
+  filter(!is.na(gender) & !is.na(age) & !is.na(bmi)) %>%
+  # 4. Rename gender to sex.
+  rename(sex = gender) %>%
+  # 5.  Create a new column called age_class, where anyone under 50 years old is labeled "under 50" and those 50 years and older are labeled "over 50".
+  age_class() <- if_else(age < 50, "under 50", "over 50") %>%
+  # 6. Group the data according to sex and age_class.
+  group_by(sex, age_class) %>%
+  # 7. Calculate the mean and median BMI according to the grouping to determine the difference in BMI between age classes and sex.
+  summarise(
+    mean_bmi = mean(bmi, na.rm = TRUE),
+    median_bmi = median(bmi, na.rm = TRUE)
+  )
