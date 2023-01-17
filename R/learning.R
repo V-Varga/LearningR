@@ -111,36 +111,79 @@ nhanes_small %>%
 
 # Participants who are not physically active
 nhanes_small %>%
-    filter(phys_active == "No")
+  filter(phys_active == "No")
 # Participants who are physically active
 nhanes_small %>%
-    filter(phys_active != "No")
+  filter(phys_active != "No")
 # Participants who have BMI equal to 25
 nhanes_small %>%
-    filter(bmi == 25)
+  filter(bmi == 25)
 # Participants who have BMI equal to or more than 25
 nhanes_small %>%
-    filter(bmi >= 25)
+  filter(bmi >= 25)
 
 # logical operators
-TRUE & TRUE
-TRUE & FALSE
-FALSE & FALSE
-TRUE | TRUE
-TRUE | FALSE
-FALSE | FALSE
+TRUE & TRUE # TRUE
+TRUE & FALSE # FALSE
+FALSE & FALSE # FALSE
+TRUE | TRUE # TRUE
+TRUE | FALSE # TRUE
+FALSE | FALSE # FALSE
 
 # When BMI is 25 AND phys_active is No
 nhanes_small %>%
-    filter(bmi == 25 & phys_active == "No")
+  filter(bmi == 25 & phys_active == "No")
 # When BMI is 25 OR phys_active is No
 nhanes_small %>%
-    filter(bmi == 25 | phys_active == "No")
+  filter(bmi == 25 | phys_active == "No")
 
 # Arranging data by age in ascending order
 nhanes_small %>%
-    arrange(age)
+  arrange(age)
 # when used on character data, alphabetical
 nhanes_small %>%
-    arrange(education)
+  arrange(education)
+# Arranging data by education then age in ascending order
+nhanes_small %>%
+  arrange(education, age)
 
+## Mutate data, mess with columns
+
+# show age in months instead of years
+nhanes_small %>%
+  mutate(age = age * 12)
+# create new column
+nhanes_small %>%
+  mutate(logged_bmi = log(bmi))
+# multiple modifications
+nhanes_small %>%
+  mutate(
+    age = age * 12,
+    logged_bmi = log(bmi)
+  )
+
+# using if statements
+nhanes_small %>%
+  mutate(old = if_else(age >= 30, "Yes", "No"))
+
+# saving a filtered dataset
+nhanes_update <- nhanes_small %>%
+  mutate(old = if_else(age >= 30, "Yes", "No"))
+
+### Exercise
+
+# 1. BMI between 20 and 40 with diabetes
+nhanes_small %>%
+  # Format should follow: variable >= number or character
+  filter(bmi >= 20 & bmi <= 40 & diabetes == "Yes")
+
+# Pipe the data into mutate function and:
+nhanes_modified <- nhanes_small %>% # Specifying dataset
+  mutate(
+    # 2. Calculate mean arterial pressure
+    mean_arterial_pressure = (((2 * bp_dia_ave) + bp_sys_ave) / 3),
+    # 3. Create young_child variable using a condition
+    young_child = if_else(age < 6, "Yes", "No")
+  )
+
+nhanes_modified
