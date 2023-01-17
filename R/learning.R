@@ -133,6 +133,10 @@ FALSE | FALSE # FALSE
 # When BMI is 25 AND phys_active is No
 nhanes_small %>%
   filter(bmi == 25 & phys_active == "No")
+#which functions the same as:
+nhanes_small %>%
+    filter(bmi == 25,
+           phys_active == "No")
 # When BMI is 25 OR phys_active is No
 nhanes_small %>%
   filter(bmi == 25 | phys_active == "No")
@@ -187,3 +191,37 @@ nhanes_modified <- nhanes_small %>% # Specifying dataset
   )
 
 nhanes_modified
+
+
+# Calculating summary stats -----------------------------------------------
+
+# calculate max BMI
+nhanes_small %>%
+    summarise(max_bmi = max(bmi))
+
+# exclude NAs
+nhanes_small %>%
+    summarise(max_bmi = max(bmi, na.rm = TRUE))
+
+# adding another summary stat
+nhanes_small %>%
+    summarise(max_bmi = max(bmi, na.rm = TRUE),
+              min_bmi = min(bmi, na.rm = TRUE))
+
+### Exercise
+
+# 1. Calculate the mean of bp_sys_ave and age.
+nhanes_small %>%
+    summarise(mean_bp_sys = mean(bp_sys_ave),
+              mean_age = bp_sys_ave)
+
+# 2. Calculate the max and min of bp_dia_ave.
+nhanes_small %>%
+    summarise(max_bp_dia = bp_dia_ave,
+              min_bp_dia = bp_dia_ave)
+
+
+# Summary stats by group --------------------------------------------------
+
+
+
