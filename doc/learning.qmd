@@ -1,5 +1,29 @@
 ---
 title: "Reproducible documents"
 author: "Vi Varga"
-format: docx
+format: html
 ---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
+```
+
+## Table of results
+
+```{r max-min-bmi-table}
+#| echo: false
+#| warning: false
+#| message: false
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, education) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  ) %>%
+  ungroup() %>% 
+    knitr::kable(caption = "Max & Min values of BMI for each diabetes & education status")
+```
+
