@@ -58,7 +58,7 @@ nhanes_small %>%
 ```
 
 
-## Figures
+## Inserting images
 
 Cute kitten in @fig-kitten-attack!
 
