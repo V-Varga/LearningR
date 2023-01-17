@@ -133,10 +133,12 @@ FALSE | FALSE # FALSE
 # When BMI is 25 AND phys_active is No
 nhanes_small %>%
   filter(bmi == 25 & phys_active == "No")
-#which functions the same as:
+# which functions the same as:
 nhanes_small %>%
-    filter(bmi == 25,
-           phys_active == "No")
+  filter(
+    bmi == 25,
+    phys_active == "No"
+  )
 # When BMI is 25 OR phys_active is No
 nhanes_small %>%
   filter(bmi == 25 | phys_active == "No")
@@ -144,6 +146,9 @@ nhanes_small %>%
 # Arranging data by age in ascending order
 nhanes_small %>%
   arrange(age)
+# can reverse to get the descending
+nhanes_small %>%
+  arrange(desc(age))
 # when used on character data, alphabetical
 nhanes_small %>%
   arrange(education)
@@ -165,10 +170,30 @@ nhanes_small %>%
     age = age * 12,
     logged_bmi = log(bmi)
   )
+# note that mutate() is sequential
+nhanes_small %>%
+  mutate(
+    age_month = age * 12,
+    logged_bmi = log(bmi),
+    age_weeks = age_month * 4
+  )
 
 # using if statements
 nhanes_small %>%
   mutate(old = if_else(age >= 30, "Yes", "No"))
+# longer test
+nhanes_small %>%
+  mutate(
+    age_month = age * 12,
+    logged_bmi = log(bmi),
+    age_weeks = age_month * 4,
+    # if (age >= 30) == TRUE, then "old" else "young"
+    old = if_else(
+      age >= 30,
+      "old",
+      "young"
+    )
+  )
 
 # saving a filtered dataset
 nhanes_update <- nhanes_small %>%
@@ -197,31 +222,102 @@ nhanes_modified
 
 # calculate max BMI
 nhanes_small %>%
-    summarise(max_bmi = max(bmi))
+  summarise(max_bmi = max(bmi))
 
 # exclude NAs
 nhanes_small %>%
-    summarise(max_bmi = max(bmi, na.rm = TRUE))
+  summarise(max_bmi = max(bmi, na.rm = TRUE))
 
 # adding another summary stat
 nhanes_small %>%
-    summarise(max_bmi = max(bmi, na.rm = TRUE),
-              min_bmi = min(bmi, na.rm = TRUE))
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  )
 
 ### Exercise
 
 # 1. Calculate the mean of bp_sys_ave and age.
 nhanes_small %>%
-    summarise(mean_bp_sys = mean(bp_sys_ave),
-              mean_age = bp_sys_ave)
+  summarise(
+    mean_bp_sys = mean(bp_sys_ave),
+    mean_age = bp_sys_ave
+  )
 
 # 2. Calculate the max and min of bp_dia_ave.
 nhanes_small %>%
-    summarise(max_bp_dia = bp_dia_ave,
-              min_bp_dia = bp_dia_ave)
+  summarise(
+    max_bp_dia = bp_dia_ave,
+    min_bp_dia = bp_dia_ave
+  )
 
 
 # Summary stats by group --------------------------------------------------
 
+# Mean age & BMI btwn those w/ & w/o diabetes
+nhanes_small %>%
+  group_by(diabetes) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  )
+# remove rows w/missing values in diabetes
+nhanes_small %>%
+  # Recall ! means "NOT", so !is.na means "is not missing"
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  )
+# adding more columns
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, phys_active) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  )
+# Since we don’t need the dataset grouped anymore, it’s good practice to end the grouping with ungroup().
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, phys_active) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+### Exercise
+
+# 1. What is the mean, max, and min differences in age between active and inactive persons with or without diabetes?
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, phys_active) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    max_age = max(age, na.rm = TRUE),
+    min_age = min(age, na.rm = TRUE)
+  )
+
+# 2. What is the mean, max, and min differences in systolic BP and diastolic BP between active and inactive persons with or without diabetes?
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes, phys_active) %>%
+  summarise(
+    mean_bp_sys = mean(bp_sys_ave, na.rm = TRUE),
+    max_bp_sys = max(bp_sys_ave, na.rm = TRUE),
+    min_bp_sys = min(bp_sys_ave, na.rm = TRUE),
+    mean_bp_dia = mean(bp_dia_ave, na.rm = TRUE),
+    max_bp_dia = max(bp_dia_ave, na.rm = TRUE),
+    min_bp_dia = min(bp_dia_ave, na.rm = TRUE),
+  )
 
 
+# Saving datasets as files ------------------------------------------------
+
+# save files as csv
+readr::write_csv(
+  nhanes_small,
+  here::here("data/nhanes_small.csv")
+)
