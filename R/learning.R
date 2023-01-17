@@ -1,3 +1,4 @@
+# When a conflict happens
 # R basics ----------------------------------------------------------------
 
 # printing to the console
