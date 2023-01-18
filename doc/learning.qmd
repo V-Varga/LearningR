@@ -29,7 +29,7 @@ nhanes_small %>%
 ```
 
 
-## Prettier table
+### Prettier table
 
 ```{r prettier-table}
 #| echo: false
@@ -154,6 +154,15 @@ nhanes_small %>%
   geom_violin(na.rm = TRUE)
 ```
 
+```{r}
+#adding another plot
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE) + 
+    geom_boxplot(na.rm = TRUE, width = 0.1)
+```
+
 
 ### Exercise to make plots with one or two variables
 
@@ -166,13 +175,14 @@ nhanes_exercise <- NHANES %>%
 ```
 
 ```{r}
-# 2. With the nhanes_exercise data, use geom_density() to show the distribution of age (participant’s age at collection) and diabetes_age (age of diabetes diagnosis) in two separate, side-by-side plots, but inside one code chunk.
 #| layout-ncol: 2
 #| label: fig-distribution-ages
 #| fig-cap: "Distribution of different age variables"
 #| fig-supcap:
 #|   - "Age at collection"
 #|   - "Age of diabetes diagnosis"
+
+# 2. With the nhanes_exercise data, use geom_density() to show the distribution of age (participant’s age at collection) and diabetes_age (age of diabetes diagnosis) in two separate, side-by-side plots, but inside one code chunk.
 
 # Distribution of age
 ggplot(nhanes_exercise, aes(x = age)) +
@@ -184,9 +194,10 @@ ggplot(nhanes_exercise, aes(x = diabetes_age)) +
 ```
 
 ```{r}
-# 3. With nhanes_exercise, use filter() and geom_bar() to find out how many people there who currently smoke (smoke_now) and who are at or above the age or 20. Drop missing values (!is.na()) from smoke_now
 #| label: smoke-now-age
 #| fig-cap: "Distribution of people of age >= 20 who smoke"
+
+# 3. With nhanes_exercise, use filter() and geom_bar() to find out how many people there who currently smoke (smoke_now) and who are at or above the age or 20. Drop missing values (!is.na()) from smoke_now
 
 # Number of people who smoke now and are or above 20 years of age,
 # removing those with missing smoking status.
@@ -210,6 +221,8 @@ nhanes_exercise %>%
 
 ### Plotting three or more variables
 
+Q: Is systolic blood pressure different in those with or without diabetes and/or dependent on education?
+
 ```{r}
 # Plot systolic blood pressure in relation to education and diabetes status
 nhanes_small %>%
@@ -218,17 +231,29 @@ nhanes_small %>%
   geom_boxplot(na.rm = TRUE)
 ```
 
+Q: How does BMI relate to systolic blood pressure and age?
+
 ```{r}
 # Plot BMI in relation to systolic blood pressure and age
 nhanes_small %>%
   ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
   geom_point(na.rm = TRUE)
+```
 
+Q: How does BMI relate to systolic blood pressure, and what is different between those with and without diabetes?
+
+```{r}
 # Plot BMI in relation to systolic blood pressure and diabetes status
 nhanes_small %>%
   filter(!is.na(diabetes)) %>%
   ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
   geom_point(na.rm = TRUE)
+
+#adding transparency
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
+  geom_point(na.rm = TRUE, alpha = 0.4)
 ```
 
 ```{r}
@@ -240,13 +265,24 @@ nhanes_small %>%
   geom_point(na.rm = TRUE) +
   facet_grid(cols = vars(diabetes))
 
+#or alternatively
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_point(na.rm = TRUE) +
+  facet_wrap(~diabetes)
+
 # faceting by row
 nhanes_small %>%
   filter(!is.na(diabetes)) %>%
   ggplot(aes(x = bmi, y = bp_sys_ave)) +
   geom_point(na.rm = TRUE) +
   facet_grid(rows = vars(diabetes))
+```
 
+Q: How does BMI relatee to systolic blood pressure, and what is the influence of diabetes and education (and age)?
+
+```{r}
 # Plot BMI in relation to systolic blood pressure, age, education and diabetes status
 nhanes_small %>%
   filter(!is.na(diabetes), !is.na(education)) %>%
