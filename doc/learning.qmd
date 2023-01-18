@@ -155,12 +155,12 @@ nhanes_small %>%
 ```
 
 ```{r}
-#adding another plot
+# adding another plot
 nhanes_small %>%
   filter(!is.na(diabetes), bmi <= 60) %>%
   ggplot(aes(x = diabetes, y = bmi)) +
-  geom_violin(na.rm = TRUE) + 
-    geom_boxplot(na.rm = TRUE, width = 0.1)
+  geom_violin(na.rm = TRUE) +
+  geom_boxplot(na.rm = TRUE, width = 0.1)
 ```
 
 
@@ -249,7 +249,7 @@ nhanes_small %>%
   ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
   geom_point(na.rm = TRUE)
 
-#adding transparency
+# adding transparency
 nhanes_small %>%
   filter(!is.na(diabetes)) %>%
   ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
@@ -265,7 +265,7 @@ nhanes_small %>%
   geom_point(na.rm = TRUE) +
   facet_grid(cols = vars(diabetes))
 
-#or alternatively
+# or alternatively
 nhanes_small %>%
   filter(!is.na(diabetes)) %>%
   ggplot(aes(x = bmi, y = bp_sys_ave)) +
@@ -380,5 +380,6 @@ base_scatterplot2
 ggsave(here::here("doc/images/scatterplot.pdf"),
   base_scatterplot2,
   width = 7, height = 5
+  #set units with `unit = "cm"`
 )
 ```
