@@ -257,3 +257,92 @@ nhanes_small %>%
     cols = vars(education)
   )
 ```
+
+
+### Exercise for changing colours
+
+```{r}
+
+# 1. Change the colour to the viridis scheme with the scale_fill_viridis_d() function, added to the end of the ggplot2 code so that the plot is colour blind friendly.
+# Barplot to work from, with two discrete variables
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d()
+
+# 2. viridis has several palettes. Add the argument option = "magma" to the scale_fill_viridis_d() function. Run the function again and see how the colour changes. Then, change "magma" to "cividis".
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d(option = "magma")
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d(option = "cividis")
+
+# 3. Now, let’s practice using the colour schemes on a plot with continuous variables. Copy and paste the code below into the code chunk. Since we are using colour instead of fill, the scale_ will be scale_colour_viridis_c().
+# Scatterplot to work from, with three continuous variables
+nhanes_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  scale_colour_viridis_c()
+
+# 4. Similar to task 2 above, use the option argument to set the palette to "inferno" and see how the colour changes. Select which colour scheme you would like.
+nhanes_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  scale_colour_viridis_c(option = "magma")
+```
+
+### Changing plot appearance
+
+```{r}
+# Create scatterplot to play with themes
+base_scatterplot <- nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(
+    rows = vars(diabetes),
+    cols = vars(education)
+  ) +
+  scale_color_viridis_c()
+
+# View the plot with the default theme
+base_scatterplot
+
+# Test out some pre-defined themes
+base_scatterplot + theme_bw()
+
+base_scatterplot + theme_minimal()
+
+base_scatterplot + theme_classic()
+
+# Set the theme for all subsequent plots
+theme_set(theme_bw())
+```
+
+```{r}
+# Add plot title and change axis titles
+base_scatterplot2 <- base_scatterplot +
+  labs(
+    title = "BMI, systolic blood pressure, and age by diabetes and education",
+    y = "Systolic Blood Pressure (mmHg)",
+    x = "BMI (kg/m2)"
+  )
+
+base_scatterplot2
+```
+
+### Saving the plot
+
+```{r}
+# Save the plot
+ggsave(here::here("doc/images/scatterplot.pdf"),
+  base_scatterplot2,
+  width = 7, height = 5
+)
+```
