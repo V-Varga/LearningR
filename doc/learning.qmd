@@ -153,3 +153,67 @@ nhanes_small %>%
   ggplot(aes(x = diabetes, y = bmi)) +
   geom_violin(na.rm = TRUE)
 ```
+
+
+### Exercise to make plots with one or two variables
+
+```{r}
+# 1. Start with the original NHANES dataset to have access to more variables.
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+```
+
+```{r}
+# 2. With the nhanes_exercise data, use geom_density() to show the distribution of age (participant’s age at collection) and diabetes_age (age of diabetes diagnosis) in two separate, side-by-side plots, but inside one code chunk.
+#| layout-ncol: 2
+#| label: fig-distribution-ages
+#| fig-cap: "Distribution of different age variables"
+#| fig-supcap:
+#|   - "Age at collection"
+#|   - "Age of diabetes diagnosis"
+
+# Distribution of age
+ggplot(nhanes_exercise, aes(x = age)) +
+  geom_density(na.rm = TRUE)
+
+# Distribution of age at diabetes diagnosis
+ggplot(nhanes_exercise, aes(x = diabetes_age)) +
+  geom_density(na.rm = TRUE)
+```
+
+```{r}
+# 3. With nhanes_exercise, use filter() and geom_bar() to find out how many people there who currently smoke (smoke_now) and who are at or above the age or 20. Drop missing values (!is.na()) from smoke_now
+#| label: smoke-now-age
+#| fig-cap: "Distribution of people of age >= 20 who smoke"
+
+# Number of people who smoke now and are or above 20 years of age,
+# removing those with missing smoking status.
+nhanes_exercise %>%
+  filter(age >= 20, !is.na(smoke_now)) %>%
+  ggplot(aes(x = smoke_now)) +
+  geom_bar()
+```
+
+```{r}
+# 4. Use mutate() to create a new column called mean_arterial_pressure using this formula above. The code template below will help you start out. Then, use geom_hex() and add another layer for geom_smooth() to find out how bmi (on the x-axis) relates to mean_arterial_pressure (on the y-axis).
+
+# BMI in relation to mean arterial pressure
+nhanes_exercise %>%
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>%
+  ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth()
+```
+
+
+### Plotting three or more variables
+
+```{r}
+# Plot systolic blood pressure in relation to education and diabetes status
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = education, y = bp_sys_ave, colour = diabetes)) +
+  geom_boxplot(na.rm = TRUE)
+```
