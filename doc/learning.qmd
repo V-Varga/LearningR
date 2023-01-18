@@ -10,6 +10,7 @@ library(tidyverse)
 nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
 ```
 
+
 ## Table of results
 
 ```{r max-min-bmi-table}
@@ -63,3 +64,92 @@ nhanes_small %>%
 Cute kitten in @fig-kitten-attack!
 
 ![Image by Dimitri Houtteman from Pixabay.](images/kitten.jpg){#fig-kitten-attack width="50%" height="50%"}
+
+
+## Visualizing data
+
+### One variable plots
+
+```{r}
+# Create histogram for BMI
+ggplot(nhanes_small, aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+```{r}
+#| fig-cap: "Distribution of BMI."
+#| label: fig-bmi-histo
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+```{r}
+# Create count barplot for education
+ggplot(nhanes_small, aes(x = education)) +
+  geom_bar()
+
+# Create count barplot for diabetes status
+ggplot(nhanes_small, aes(x = diabetes)) +
+  geom_bar()
+```
+
+```{r}
+#| label: fig-diabetes-education
+#| fig-cap: "Counts of Diabetes and Education."
+#| fig-subcap:
+#|   - "Number of those with or without Diabetes."
+#|   - "Number of those with different educational status."
+#| layout-ncol: 2
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+
+nhanes_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+```
+
+
+### Plotting two variables
+
+```{r}
+ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE)
+
+# Runs a smoothing line with confidence interval
+ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+
+```{r}
+# Two categorical/discrete variables
+# Note that we can pipe data into ggplot
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar()
+
+# "dodged" (side-by-side) bar plot
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+
+```{r}
+# Using mixed data
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE)
+```
