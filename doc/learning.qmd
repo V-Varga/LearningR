@@ -217,3 +217,43 @@ nhanes_small %>%
   ggplot(aes(x = education, y = bp_sys_ave, colour = diabetes)) +
   geom_boxplot(na.rm = TRUE)
 ```
+
+```{r}
+# Plot BMI in relation to systolic blood pressure and age
+nhanes_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE)
+
+# Plot BMI in relation to systolic blood pressure and diabetes status
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
+  geom_point(na.rm = TRUE)
+```
+
+```{r}
+# Plot BMI in relation to systolic blood pressure and diabetes status using
+# faceting by column
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(cols = vars(diabetes))
+
+# faceting by row
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(rows = vars(diabetes))
+
+# Plot BMI in relation to systolic blood pressure, age, education and diabetes status
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(
+    rows = vars(diabetes),
+    cols = vars(education)
+  )
+```
